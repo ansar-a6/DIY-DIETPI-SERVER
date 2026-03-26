@@ -8,20 +8,14 @@ Replacing Windows 10 (using as a server) to another OS which is light weight and
 ### Available Physical Hardware
 
 Storage: Sata1: Hdd 320gb, SlimSata2: Hdd 320gb (Caddy)
-
 Connection ports: Hdmi, usb ports * 3
-
 Cpu: Pentium N3540 2.14Ghz - 4 cores
-
 GPU: Igpu (unknown)
-
 RAM: 4gb - ddr3 - single slot
-
 Bios: non-csm
 
-## Decision
-### Goal
-The goal was to select a linux distro which is light weight and uses less ram plus cpu cycles also i had some experience using it.
+### Decision
+Goal: The goal was to select a linux distro which is light weight and uses less ram plus cpu cycles also i had some experience using it.
 
 Three distro were selected for this purpose: ubuntu server, debian and dietpi. By comparing these i had only experience with ubuntu desktop, debian 23.0 and dietpi.
 
