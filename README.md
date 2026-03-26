@@ -7,7 +7,7 @@ Replacing Windows 10 (using as a server) to another OS which is light weight and
 ## Operating system planning
 ### Available Physical Hardware
 
-Storage: Sata1: Hdd 320gb, SlimSata2: Hdd 320gb (Caddy)
+Storage: Sata1 (Hdd 320gb) SlimSata2 (Hdd 320gb - Caddy)
 Connection ports: Hdmi, usb ports * 3
 Cpu: Pentium N3540 2.14Ghz - 4 cores
 GPU: Igpu (unknown)
