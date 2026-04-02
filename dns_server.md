@@ -16,7 +16,6 @@ Run the DietPi software tool:
 ## 3. Enable and Restart dnsmasq
 To ensure `dnsmasq` works alongside Unbound, run the following commands:
 
-<button onclick="navigator.clipboard.writeText('sudo systemctl enable dnsmasq\nsudo systemctl restart dnsmasq')">Copy Commands</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo systemctl enable dnsmasq
 sudo systemctl restart dnsmasq
@@ -25,7 +24,6 @@ sudo systemctl restart dnsmasq
 ## 4. Enable and Start Unbound
 Ensure the Unbound service is active and set to start on boot:
 
-<button onclick="navigator.clipboard.writeText('sudo systemctl enable unbound\nsudo systemctl start unbound')">Copy Commands</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo systemctl enable unbound
 sudo systemctl start unbound
@@ -34,14 +32,12 @@ sudo systemctl start unbound
 ## 5. Configure Unbound
 Edit the configuration file to define your local network and upstream DNS providers:
 
-<button onclick="navigator.clipboard.writeText('sudo nano /etc/unbound/unbound.conf.d/dietpi.conf')">Copy Command</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo nano /etc/unbound/unbound.conf.d/dietpi.conf
 </pre>
 
 Add or update the content with the following configuration:
 
-<button onclick="navigator.clipboard.writeText('server:\n    interface: 0.0.0.0\n    port: 53\n    access-control: 192.168.0.0/24 allow\n    do-ip4: yes\n    do-udp: yes\n    do-tcp: yes\n    cache-min-ttl: 3600\n    cache-max-ttl: 86400\n    prefetch: yes\n    hide-identity: yes\n    hide-version: yes\n\nforward-zone:\n    name: \".\"\n    forward-addr: 1.1.1.1\n    forward-addr: 8.8.8.8')">Copy Configuration</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 server:
     interface: 0.0.0.0
@@ -69,7 +65,6 @@ forward-zone:
 ## 6. Restart Unbound
 Apply the changes by restarting the service:
 
-<button onclick="navigator.clipboard.writeText('sudo systemctl restart unbound')">Copy Command</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo systemctl restart unbound
 </pre>
@@ -77,7 +72,6 @@ sudo systemctl restart unbound
 ## 7. Verify Service
 Check if Unbound is running correctly:
 
-<button onclick="navigator.clipboard.writeText('systemctl status unbound --no-pager')">Copy Command</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 systemctl status unbound --no-pager
 </pre>
@@ -90,7 +84,6 @@ Active: active (running)
 ## 8. Test DNS Resolution
 Run the following command from a client device (laptop/PC) to test the server:
 
-<button onclick="navigator.clipboard.writeText('nslookup google.com 192.168.0.101')">Copy Command</button>
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 nslookup google.com 192.168.0.101
 </pre>
@@ -110,7 +103,6 @@ Addresses:  2a00:1450:4019:815::200e
 *   **IP Address:** Replace `192.168.0.101` with your actual server IP address.
 *   **Ports:** Ensure port `53` is not blocked by a firewall or used by another service.
 *   **Logs:** To troubleshoot, view the service logs:
-    <button onclick="navigator.clipboard.writeText('journalctl -u unbound')">Copy Command</button>
     `journalctl -u unbound`
 
 ## Summary
