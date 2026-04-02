@@ -16,21 +16,21 @@ Run the DietPi software tool:
 ## 3. Disable dnsmasq (to avoid port conflicts)
 Since Unbound will act as your primary DNS server on port 53, you must ensure `dnsmasq` is not competing for the same port.
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo systemctl stop dnsmasq
-sudo systemctl disable dnsmasq
+systemctl stop dnsmasq
+systemctl disable dnsmasq
 </pre>
 
 ## 4. Enable and Start Unbound
 Ensure the Unbound service is active and set to start on boot:
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo systemctl enable unbound
-sudo systemctl start unbound
+systemctl enable unbound
+systemctl start unbound
 </pre>
 
 ## 5. Configure Unbound
 Edit the configuration file to define your local network and upstream DNS providers:
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo nano /etc/unbound/unbound.conf.d/dietpi.conf
+nano /etc/unbound/unbound.conf.d/dietpi.conf
 </pre>
 
 Add or update the content with the following configuration. **Note:** Ensure `access-control` matches your actual network subnet (usually `192.168.0.0/24` or `192.168.1.0/24`).
@@ -64,18 +64,17 @@ forward-zone:
 ## 6. Restart Unbound
 Apply the changes by restarting the service:
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo systemctl restart unbound
+systemctl restart unbound
 </pre>
 
 ## 7. Verify Service
-Check if Unbound is running correctly and listening on port 53:
+Check if Unbound is running correctly:
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo systemctl status unbound --no-pager
-sudo ss -tulpn | grep :53
+systemctl status unbound --no-pager
 </pre>
 
 **Expected result:**
-`Active: active (running)` and a line showing `unbound` listening on `0.0.0.0:53`.
+`Active: active (running)`
 
 ## 8. Test DNS Resolution
 Run the following command from a client device (laptop/PC) to test the server:
@@ -94,7 +93,7 @@ Addresses:  142.250.202.142
 
 ## Notes
 *   **Subnet Check:** If your devices have IPs like `192.168.1.X`, change the config to `192.168.1.0/24`.
-*   **Troubleshooting:** If the service fails to start, check for port 53 conflicts using `sudo lsof -i :53`.
+*   **Troubleshooting:** If the service fails to start, check if another service is using port 53.
 
 ## Summary
 You have successfully installed and configured `unbound.service` as your local DNS resolver, improving both privacy and speed for your network.
