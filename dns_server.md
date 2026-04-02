@@ -107,3 +107,24 @@ Addresses:  2a00:1450:4019:815::200e
 
 ## Summary
 You have successfully installed and configured `unbound.service` as your local DNS resolver, improving both privacy and speed for your network.
+
+## FAQ: Why use a Local DNS Server?
+
+### 1. What is the benefit of a DNS server?
+By hosting your own DNS server like Unbound, you gain several advantages:
+*   **Privacy:** Your ISP (Internet Service Provider) can no longer easily track every website you visit.
+*   **Speed:** Frequently visited sites are stored in a local "cache," allowing your devices to get the IP address instantly without asking the internet.
+*   **Reliability:** You are no longer dependent on your ISP's often slow or unstable DNS servers.
+
+### 2. Does my router really need this? (Modern vs. Tenda N301)
+*   **Modern Routers:** While modern high-end routers have faster processors and more RAM, they still lack the advanced caching and privacy features of a dedicated Unbound server.
+*   **Your Tenda N301:** This is a budget-friendly, entry-level router with very limited CPU and RAM. When multiple devices (phones, TVs, laptops) all ask the router for DNS at once, it can "choke" or slow down. By offloading this task to your DietPi server, you're literally giving your router a "break," allowing it to focus purely on moving data packets, which can improve your overall network stability.
+
+### 3. What does it actually do?
+Think of a DNS server as the **"Phonebook of the Internet."** 
+Computers don't understand names like `google.com`; they only understand numbers called IP addresses (like `142.250.202.142`). When you type a URL, your local DNS server quickly looks up the "phone number" (IP) for that "name" (URL). Because it's now sitting right next to you on your local network, that lookup happens almost instantly.
+
+### 4. How much does it benefit Latency, Speed, and Connections?
+*   **Latency:** This is where you see the biggest win. A normal DNS lookup to your ISP might take **20ms to 100ms**. A cached lookup from your local Unbound server takes **less than 1ms**. This makes the web feel "snappier" because pages start loading the moment you hit Enter.
+*   **Speed:** It won't increase your raw "Megabits per second" download speed, but it reduces the "waiting time" *before* a download starts.
+*   **Connections:** It improves "Connection Stability." Budget routers like the N301 often drop connections if they get overwhelmed by too many simultaneous DNS requests. A dedicated server handles thousands of requests effortlessly, ensuring your connection stays solid even when many people are using the internet.
