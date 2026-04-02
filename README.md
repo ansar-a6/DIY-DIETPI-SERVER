@@ -3,16 +3,17 @@
 This is a small home server which is operated by the DietPi operating system powered by a reused damaged laptop. First my goal was to switch from windows 10 which was running a server for dns and file sharing. So choosing a linux distro and started to research on it, later it expanded to from smba and dns to gitea and python bots.
 
 ## Goal
-Replacing Windows 10 (using as a server) to another OS which is light weight and doesn't waste resources like ram memory, cpu cycles and hdds life.
+Replacing Windows 10 (using as a server) to another OS which is light weight and doesn't waste resources like ram memory, cpu cycles and aming to increase hdd's life spam.
 ## Operating system planning
 ### Available Physical Hardware
-
-Storage: Sata1 (Hdd 320gb) SlimSata2 (Hdd 320gb - Caddy)
-Connection ports: Hdmi, usb ports * 3
-Cpu: Pentium N3540 2.14Ghz - 4 cores
-GPU: Igpu (unknown)
-RAM: 4gb - ddr3 - single slot
-Bios: non-csm
+|Compnent |Information|
+|---------|-----------|
+|Storage: |Sata1 (Hdd 320gb) SlimSata2 (Hdd 320gb - Caddy)|
+|Connection ports: |Hdmi, usb ports * 3|
+|Cpu: |Pentium N3540 2.14Ghz - 4 cores|
+|GPU: |Igpu (unknown)|
+|RAM: |4gb - ddr3 - single slot|
+|Bios: |non-csm|
 
 ### Decision
 Goal: The goal was to select a linux distro which is light weight and uses less ram plus cpu cycles also i had some experience using it.
