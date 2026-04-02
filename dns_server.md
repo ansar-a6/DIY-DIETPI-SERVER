@@ -13,17 +13,15 @@ Run the DietPi software tool:
 2.  Select **Unbound** (ID: 182).
 3.  Proceed with the installation.
 
-## 3. Enable and Restart dnsmasq
-To ensure `dnsmasq` works alongside Unbound, run the following commands:
-
+## 3. Disable dnsmasq (to avoid port conflicts)
+Since Unbound will act as your primary DNS server on port 53, you must ensure `dnsmasq` is not competing for the same port.
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-sudo systemctl enable dnsmasq
-sudo systemctl restart dnsmasq
+sudo systemctl stop dnsmasq
+sudo systemctl disable dnsmasq
 </pre>
 
 ## 4. Enable and Start Unbound
 Ensure the Unbound service is active and set to start on boot:
-
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo systemctl enable unbound
 sudo systemctl start unbound
@@ -31,12 +29,11 @@ sudo systemctl start unbound
 
 ## 5. Configure Unbound
 Edit the configuration file to define your local network and upstream DNS providers:
-
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo nano /etc/unbound/unbound.conf.d/dietpi.conf
 </pre>
 
-Add or update the content with the following configuration:
+Add or update the content with the following configuration. **Note:** Ensure `access-control` matches your actual network subnet (usually `192.168.0.0/24` or `192.168.1.0/24`).
 
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 server:
@@ -59,31 +56,29 @@ forward-zone:
 </pre>
 
 **Explanation:**
-*   **server section:** Defines how Unbound listens for requests. It is configured to allow traffic from your local subnet (`192.168.0.0/24`) and includes caching settings (TTL) to improve performance.
-*   **forward-zone section:** Specifies where Unbound should look if it doesn't have the answer in its cache. Here, it forwards requests to public upstream servers (`1.1.1.1` and `8.8.8.8`).
+*   **interface: 0.0.0.0:** Tells Unbound to listen on all available network interfaces.
+*   **port: 53:** The standard port for DNS traffic.
+*   **access-control:** Allows only your local network to use this DNS server (Security measure).
+*   **forward-zone:** Forwards requests to secure upstream providers like Cloudflare (`1.1.1.1`) or Google (`8.8.8.8`).
 
 ## 6. Restart Unbound
 Apply the changes by restarting the service:
-
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 sudo systemctl restart unbound
 </pre>
 
 ## 7. Verify Service
-Check if Unbound is running correctly:
-
+Check if Unbound is running correctly and listening on port 53:
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
-systemctl status unbound --no-pager
+sudo systemctl status unbound --no-pager
+sudo ss -tulpn | grep :53
 </pre>
 
 **Expected result:**
-<pre style="color:#00ff00; background:#000000; padding: 10px;">
-Active: active (running)
-</pre>
+`Active: active (running)` and a line showing `unbound` listening on `0.0.0.0:53`.
 
 ## 8. Test DNS Resolution
 Run the following command from a client device (laptop/PC) to test the server:
-
 <pre style="color:#00ff00; background:#000000; padding: 10px;">
 nslookup google.com 192.168.0.101
 </pre>
@@ -94,16 +89,12 @@ Server:  UnKnown
 Address:  192.168.0.101
 
 Name:    google.com
-Addresses:  2a00:1450:4019:815::200e
-142.250.202.142
+Addresses:  142.250.202.142
 </pre>
-*Note: The first lookup might be slightly slow. Subsequent lookups for the same domain will be much faster as they are served from the local cache.*
 
 ## Notes
-*   **IP Address:** Replace `192.168.0.101` with your actual server IP address.
-*   **Ports:** Ensure port `53` is not blocked by a firewall or used by another service.
-*   **Logs:** To troubleshoot, view the service logs:
-    `journalctl -u unbound`
+*   **Subnet Check:** If your devices have IPs like `192.168.1.X`, change the config to `192.168.1.0/24`.
+*   **Troubleshooting:** If the service fails to start, check for port 53 conflicts using `sudo lsof -i :53`.
 
 ## Summary
 You have successfully installed and configured `unbound.service` as your local DNS resolver, improving both privacy and speed for your network.
@@ -122,9 +113,9 @@ By hosting your own DNS server like Unbound, you gain several advantages:
 
 ### 3. What does it actually do?
 Think of a DNS server as the **"Phonebook of the Internet."** 
-Computers don't understand names like `google.com`; they only understand numbers called IP addresses (like `142.250.202.142`). When you type a URL, your local DNS server quickly looks up the "phone number" (IP) for that "name" (URL). Because it's now sitting right next to you on your local network, that lookup happens almost instantly.
+Computers don't understand names like `google.com`; they only understand numbers called IP addresses. When you type a URL, your local DNS server quickly looks up the "phone number" (IP) for that "name" (URL). Because it's now sitting right next to you on your local network, that lookup happens almost instantly.
 
 ### 4. How much does it benefit Latency, Speed, and Connections?
-*   **Latency:** This is where you see the biggest win. A normal DNS lookup to your ISP might take **20ms to 100ms**. A cached lookup from your local Unbound server takes **less than 1ms**. This makes the web feel "snappier" because pages start loading the moment you hit Enter.
-*   **Speed:** It won't increase your raw "Megabits per second" download speed, but it reduces the "waiting time" *before* a download starts.
-*   **Connections:** It improves "Connection Stability." Budget routers like the N301 often drop connections if they get overwhelmed by too many simultaneous DNS requests. A dedicated server handles thousands of requests effortlessly, ensuring your connection stays solid even when many people are using the internet.
+*   **Latency:** This is where you see the biggest win. A normal DNS lookup to your ISP might take **20ms to 100ms**. A cached lookup from your local Unbound server takes **less than 1ms**. This makes the web feel "snappier."
+*   **Speed:** It won't increase your raw download speed, but it reduces the "waiting time" *before* a download starts.
+*   **Connections:** It improves "Connection Stability." Budget routers like the N301 often drop connections if they get overwhelmed by too many simultaneous DNS requests. A dedicated server handles these effortlessly.
